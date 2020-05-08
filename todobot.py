@@ -87,21 +87,15 @@ def done(update, context):
 
 
 def dart(update, context):
-    text = update.message.text.split(' ')
-    if not text[1]:
-        times = 1
-    else:
-        times = text[1]
+    text = update.message.text
+    times = text.split(' ')[1]
     for i in range(int(times)):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎯')
 
 
 def dice(update, context):
-    text = update.message.text.split(' ')
-    if not text[1]:
-        times = 1
-    else:
-        times = text[1]
+    text = update.message.text
+    times = text.split(' ')[1]
     for i in range(int(times)):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
 
