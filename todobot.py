@@ -15,11 +15,12 @@ bot.
 
 import logging
 import os
-
+from emoji import emojize
+from telegram import Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 token = os.getenv('TOKEN')
-
+bot = Bot(token=token)
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -35,6 +36,18 @@ def start(update, context):
 
 def todo(update, context):
     update.message.reply_text('TBD')
+
+def dart(update, context):
+    text = update.message.text
+    times = text.split(' ')[1]
+    for i in range(int(times)):
+        bot.send_dice(chat_id=update.message.chat_id, emoji="🎯")
+    
+def dice(update, context):
+    text = update.message.text
+    times = text.split(' ')[1]
+    for i in range(int(times)):
+        bot.send_dice(chat_id=update.message.chat_id, emoji="🎲")
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -54,6 +67,8 @@ def main():
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("todo", todo))
+    dp.add_handler(CommandHandler("dart", dart))
+    dp.add_handler(CommandHandler("dice", dice))
 
     # log all errors
     dp.add_error_handler(error)
