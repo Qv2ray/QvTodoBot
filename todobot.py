@@ -126,7 +126,7 @@ def main():
     dp = updater.dispatcher
 
     conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('start', start)],
+        entry_points=[CommandHandler('todo', todo)],
 
         states={
             CHOOSING: [MessageHandler(Filters.regex('^(Add todo|Remove todo)$'),
