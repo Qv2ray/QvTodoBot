@@ -45,13 +45,15 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
 
+# Getting data from JSON
+
 
 def todo(update, context):
     update.message.reply_text('TBD', reply_markup=markup)
     return CHOOSING
 
-# Getting data from JSON
 
+# Manipulating data
 
 def regular_choice(update, context):
     text = update.message.text
@@ -59,17 +61,22 @@ def regular_choice(update, context):
 
     return TYPING_REPLY
 
-# Manipulating data
 
 
 def received_information(update, context):
     user_data = context.user_data
     text = update.message.text
     category = user_data['choice']
-    user_data[category] = text
-#    del user_data['choice']
+    del user_data['choice']
+    todo_list = user_data['todo']
 
-    update.message.reply_text(user_data,
+    if category == 'Add todo':
+        if not todo_list:
+            todo_list = [text]
+        else:
+            todo_list.append(text)
+
+    update.message.reply_text(todo_list,
                               reply_markup=markup)
 
     return CHOOSING
@@ -79,10 +86,11 @@ def received_information(update, context):
 
 def done(update, context):
     user_data = context.user_data
+    todo_list = user_data['todo']
     if 'choice' in user_data:
         del user_data['choice']
 
-    update.message.reply_text('', reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text(todo_list, reply_markup=ReplyKeyboardRemove())
 
     user_data.clear()
     return ConversationHandler.END
@@ -132,7 +140,7 @@ def main():
         entry_points=[CommandHandler('todo', todo)],
 
         states={
-            CHOOSING: [MessageHandler(Filters.regex('^(Add todo|Remove todo)$'),
+            CHOOSING: [MessageHandler(Filters.regex('^(Add todo|Remove todo|Update todo|Toggle todo)$'),
                                       regular_choice)
                        ],
 
