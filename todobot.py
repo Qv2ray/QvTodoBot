@@ -105,6 +105,10 @@ def dice(update, context):
     for i in range(times):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
 
+def showadmins(update, context):
+    admins = bot.get_chat_administrators(chat_id=update.message.chat_id)
+    update.message.reply_text(admins)
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -144,6 +148,7 @@ def main():
     dp.add_handler(CommandHandler("todo", todo))
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
+    dp.add_handler(CommandHandler("showadmins", showadmins))
 
     # log all errors
     dp.add_error_handler(error)
