@@ -82,6 +82,9 @@ def done(update, context):
     if 'choice' in user_data:
         del user_data['choice']
 
+    update.message.reply_text(user_data,
+                              reply_markup=ReplyKeyboardRemove())
+
     user_data.clear()
     return ConversationHandler.END
 
@@ -104,6 +107,7 @@ def dice(update, context):
         times = 1
     for i in range(times):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
+
 
 def showadmins(update, context):
     admins = bot.get_chat_administrators(chat_id=update.message.chat_id)
