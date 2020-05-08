@@ -17,7 +17,9 @@ import logging
 import os
 
 from telegram import Bot
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
+                          ConversationHandler, DictPersistence)
 
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
@@ -27,27 +29,41 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+CHOOSING, TYPING_REPLY = range(2)
+reply_keyboard = [
+    ['Add todo', 'Remove todo'],
+    ['Update todo', 'Toggle todo'],
+    ['Done']
+]
+markup = ReplyKeyboardMarkup(reply_keyboard)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
+
+
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
 
+
 def todo(update, context):
-    update.message.reply_text('TBD')
+    update.message.reply_text('TBD', reply_markup=markup)
+    return CHOOSING
+
 
 def dart(update, context):
     text = update.message.text
     times = text.split(' ')[1]
     for i in range(int(times)):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎯')
-    
+
+
 def dice(update, context):
     text = update.message.text
     times = text.split(' ')[1]
     for i in range(int(times)):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
+
 
 def error(update, context):
     """Log Errors caused by Updates."""
