@@ -33,16 +33,8 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
 
-
-def help(update, context):
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-
-
-def echo(update, context):
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
-
+def todo(update, context):
+    update.message.reply_text('TBD')
 
 def error(update, context):
     """Log Errors caused by Updates."""
