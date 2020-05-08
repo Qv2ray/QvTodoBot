@@ -88,7 +88,6 @@ def done(update, context):
 
 def dart(update, context):
     text = update.message.text
-    times = text.split(' ')[1]
     try:
         times = text.split(' ')[1]
     except IndexError:
