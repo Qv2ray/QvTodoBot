@@ -15,7 +15,7 @@ bot.
 
 import logging
 import os
-from emoji import emojize
+
 from telegram import Bot
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -41,13 +41,13 @@ def dart(update, context):
     text = update.message.text
     times = text.split(' ')[1]
     for i in range(int(times)):
-        bot.send_dice(chat_id=update.message.chat_id, emoji=emojize(':dart:'))
+        bot.send_dice(chat_id=update.message.chat_id, emoji='🎯')
     
 def dice(update, context):
     text = update.message.text
     times = text.split(' ')[1]
     for i in range(int(times)):
-        bot.send_dice(chat_id=update.message.chat_id, emoji=emojize(':dice:'))
+        bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
 
 def error(update, context):
     """Log Errors caused by Updates."""
