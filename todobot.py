@@ -82,7 +82,7 @@ def done(update, context):
     if 'choice' in user_data:
         del user_data['choice']
 
-    update.message.reply_text(reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text('', reply_markup=ReplyKeyboardRemove())
 
     user_data.clear()
     return ConversationHandler.END
