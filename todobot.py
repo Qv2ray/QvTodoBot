@@ -50,6 +50,41 @@ def todo(update, context):
     update.message.reply_text('TBD', reply_markup=markup)
     return CHOOSING
 
+# Getting data from JSON
+
+
+def regular_choice(update, context):
+    text = update.message.text
+    context.user_data['choice'] = text
+
+    return TYPING_REPLY
+
+# Manipulating data
+
+
+def received_information(update, context):
+    user_data = context.user_data
+    text = update.message.text
+    category = user_data['choice']
+    user_data[category] = text
+#    del user_data['choice']
+
+    update.message.reply_text(user_data,
+                              reply_markup=markup)
+
+    return CHOOSING
+
+# Saving data to JSON
+
+
+def done(update, context):
+    user_data = context.user_data
+    if 'choice' in user_data:
+        del user_data['choice']
+
+    user_data.clear()
+    return ConversationHandler.END
+
 
 def dart(update, context):
     text = update.message.text
@@ -79,6 +114,24 @@ def main():
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
+
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
+
+        states={
+            CHOOSING: [MessageHandler(Filters.regex('^(Add todo|Remove todo)$'),
+                                      regular_choice)
+                       ],
+
+            TYPING_REPLY: [MessageHandler(Filters.text,
+                                          received_information),
+                           ],
+        },
+
+        fallbacks=[MessageHandler(Filters.regex('^Done$'), done)]
+    )
+
+    dp.add_handler(conv_handler)
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("start", start))
