@@ -157,6 +157,7 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
+    dp.add_handler(CommandHandler("gettodo", gettodo))
 
     # log all errors
     dp.add_error_handler(error)
