@@ -79,6 +79,8 @@ def todo(update, context):
                 message = format_data(todo_list)
 
             update.message.reply_text(message)
+        else:
+            update.message.reply_text('Todo item can not be empty')
     except Exception:
         update.message.reply_text('An error occurred')
 
