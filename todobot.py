@@ -75,18 +75,19 @@ def received_information(update, context):
     category = user_data['choice']
     del user_data['choice']
     try:
-        user_data['todo'] = []
+        if 'todo' not in user_data:
+            user_data['todo'] = []
         todo_list = user_data['todo']
 
         if category == 'Add todo':
             todo_list.append(text)
 
         if not todo_list:
-            todo_list = "Nothing to do here."
+            message = "Nothing to do here."
         else:
-            todo_list = format_data(todo_list)
+            message = format_data(todo_list)
 
-        update.message.reply_text(todo_list,
+        update.message.reply_text(message,
                                   reply_markup=markup)
     except Exception:
         update.message.reply_text('An error occurred',
@@ -102,8 +103,9 @@ def done(update, context):
     todo_list = user_data['todo']
     if 'choice' in user_data:
         del user_data['choice']
+    message = format_data(todo_list)
 
-    update.message.reply_text(todo_list, reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text(message, reply_markup=ReplyKeyboardRemove())
 
     user_data.clear()
     return ConversationHandler.END
