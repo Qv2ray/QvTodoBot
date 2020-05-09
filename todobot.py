@@ -123,16 +123,11 @@ def received_information(update, context):
 
 def done(update, context):
     user_data = context.user_data
-    todo_list = user_data['todo']
     if 'choice' in user_data:
         del user_data['choice']
-    if not todo_list:
-        message = 'Nothing to do here.'
-    else:
-        message = format_data(todo_list)
 
     update.message.reply_text(
-        message, reply_markup=ReplyKeyboardRemove())
+        'Done!', reply_markup=ReplyKeyboardRemove())
 
     user_data.clear()
     return ConversationHandler.END
