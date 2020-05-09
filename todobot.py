@@ -48,13 +48,16 @@ def start(update, context):
 
 # Getting data from JSON (TODO)
 
+# Manipulating data (TODO)
+
 # Add todo
 
 
 def todo(update, context):
     user_data = context.user_data
     try:
-        text = update.message.text.split(' ')[1]
+        text = update.message.text.split(' ')[1:]
+        text = ' '.join(map(str, text))
         if 'todo' not in user_data:
             user_data['todo'] = []
         todo_list = user_data['todo']
@@ -68,7 +71,35 @@ def todo(update, context):
     except Exception:
         update.message.reply_text('An error occurred')
 
-# Manipulating data (TODO)
+
+def remove(update, context):
+    user_data = context.user_data
+    try:
+        index = int(update.message.text.split(' ')[1])
+        todo_list = user_data['todo']
+        todo_list.pop(index)
+        message = format_data(todo_list)
+        update.message.reply_text(message)
+    except Exception:
+        update.message.reply_text('An error occurred')
+
+
+def toggle(update, context):
+    user_data = context.user_data
+    try:
+        index = int(update.message.text.split(' ')[1])
+        todo_list = user_data['todo']
+        
+        if emojize(":white_heavy_check_mark:") not in todo_list[index]:
+            todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
+        else:
+            todo_list[index] = todo_list[index].replace(
+                emojize(":white_heavy_check_mark:"), '')
+
+        message = format_data(todo_list)
+        update.message.reply_text(message)
+    except Exception:
+        update.message.reply_text('An error occurred')
 
 
 def dart(update, context):
