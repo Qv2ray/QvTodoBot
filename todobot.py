@@ -82,7 +82,10 @@ def received_information(update, context):
         if category == 'Add todo':
             todo_list.append(text)
         elif category == 'Remove todo':
-            index = text - 1
+            try:
+                index = int(text) - 1
+            except TypeError:
+                index = text
             todo_list.pop(index)
 
         if not todo_list:
