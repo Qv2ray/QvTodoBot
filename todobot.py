@@ -80,7 +80,7 @@ def received_information(update, context):
         todo_list = user_data['todo']
 
         if category == 'Add todo':
-            todo_list.append(text)
+            todo_list.append(f'{len(todo_list) + 1}. {text}')
 
         if not todo_list:
             message = "Nothing to do here."
