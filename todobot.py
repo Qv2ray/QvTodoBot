@@ -62,7 +62,7 @@ def todo(update, context):
             user_data['todo'] = []
         todo_list = user_data['todo']
 
-        if not todo_list.isspace():
+        if not text.isspace():
             todo_list.append(text)
         else:
             update.message.reply_text('Todo item not allowed to be empty')
