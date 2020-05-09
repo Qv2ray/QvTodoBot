@@ -77,9 +77,9 @@ def remove(update, context):
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
-#        todo_list.pop(index)
-#        message = format_data(todo_list)
-        update.message.reply_text(index)
+        todo_list.pop(int(index) - 1)
+        message = format_data(todo_list)
+        update.message.reply_text(message)
     except Exception:
         update.message.reply_text('An error occurred')
 
