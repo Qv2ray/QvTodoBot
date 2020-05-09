@@ -40,6 +40,14 @@ markup = ReplyKeyboardMarkup(reply_keyboard)
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
+# Formatting data
+
+
+def format_data(data):
+    formatted_data = f'''
+    {'\n'.join(data)}
+    '''
+
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -62,22 +70,28 @@ def regular_choice(update, context):
     return TYPING_REPLY
 
 
-
 def received_information(update, context):
     user_data = context.user_data
     text = update.message.text
     category = user_data['choice']
     del user_data['choice']
-    todo_list = user_data['todo']
+    try:
+        user_data['todo'] = []
+        todo_list = user_data['todo']
 
-    if category == 'Add todo':
-        if not todo_list:
-            todo_list = [text]
-        else:
+        if category == 'Add todo':
             todo_list.append(text)
 
-    update.message.reply_text(todo_list,
-                              reply_markup=markup)
+        if not todo_list:
+            todo_list = "Nothing to do here."
+        else:
+            todo_list = format_data(todo_list)
+
+        update.message.reply_text(todo_list,
+                                  reply_markup=markup)
+    except Exception:
+        update.message.reply_text('An error occurred',
+                                  reply_markup=ReplyKeyboardRemove())
 
     return CHOOSING
 
