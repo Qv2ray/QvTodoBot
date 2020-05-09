@@ -17,9 +17,8 @@ import logging
 import os
 
 from telegram import Bot
-from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
-from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
-                          ConversationHandler, DictPersistence)
+from telegram.ext import (Updater, CommandHandler,
+                          MessageHandler, Filters, DictPersistence)
 from emoji import emojize
 
 token = os.getenv('TOKEN')
@@ -30,13 +29,6 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-CHOOSING, TYPING_REPLY = range(2)
-reply_keyboard = [
-    ['Add todo', 'Remove todo'],
-    ['Update todo', 'Toggle todo'],
-    ['Done']
-]
-markup = ReplyKeyboardMarkup(reply_keyboard)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -72,8 +64,7 @@ def todo(update, context):
         else:
             message = format_data(todo_list)
 
-        update.message.reply_text(message,
-                                  reply_markup=markup)
+        update.message.reply_text(message)
     except Exception:
         update.message.reply_text('An error occurred')
 
