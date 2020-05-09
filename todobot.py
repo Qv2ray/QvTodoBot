@@ -104,7 +104,6 @@ def remove(update, context):
 
 def done(update, context):
     user_data = context.user_data
-    pickle.user_data(user_data)
     pickle.flush()
 
 
