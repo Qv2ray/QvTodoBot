@@ -99,10 +99,7 @@ def received_information(update, context):
                 index = int(text) - 1
             except ValueError:
                 index = text
-            if '~~' not in todo_list[index]:
-                todo_list[index] = f'~~{todo_list[index]}~~'
-            else:
-                todo_list[index] = todo_list[index].replace('~~', '')
+            todo_list[index] = f'~~{todo_list[index]}~~'
 
         if not todo_list:
             message = "Nothing to do here."
