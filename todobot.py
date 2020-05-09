@@ -41,8 +41,13 @@ def format_data(data):
         [f'{i + 1}. {data[i]}' for i in range(len(data))])
     return formatted_data
 
-def handle_initial_data(pickle_data, context): 
-    if not context.user_data:
+def handle_initial_data(update, context):
+    try:
+        pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+        pickle_data_exists = True
+    except KeyError:
+        pickle_data_exists = False
+    if not context.user_data and pickle_data_exists:
         data = pickle_data
     else:
         data = context.user_data
@@ -55,8 +60,7 @@ def start(update, context):
 # Getting data from JSON (TODO)
 
 def gettodo(update, context):
-    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-    user_data = handle_initial_data(pickle_data, context)
+    user_data = handle_initial_data(update, context)
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
@@ -71,8 +75,7 @@ def gettodo(update, context):
 
 
 def todo(update, context):
-    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-    user_data = handle_initial_data(pickle_data, context)
+    user_data = handle_initial_data(update, context)
     try:
         text = update.message.text.split(' ')[1:]
         if text:
@@ -94,8 +97,7 @@ def todo(update, context):
 
 
 def remove(update, context):
-    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-    user_data = handle_initial_data(pickle_data, context)
+    user_data = handle_initial_data(update, context)
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
@@ -114,8 +116,7 @@ def done(update, context):
 
 
 def toggle(update, context):
-    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-    user_data = handle_initial_data(pickle_data, context)
+    user_data = handle_initial_data(update, context)
     try:
         index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
