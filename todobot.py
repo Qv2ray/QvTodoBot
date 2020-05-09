@@ -44,9 +44,8 @@ markup = ReplyKeyboardMarkup(reply_keyboard)
 
 
 def format_data(data):
-    formatted_data = f'''
-    {'\n'.join(data)}
-    '''
+    formatted_data = '\n'.join(data)
+    return formatted_data
 
 
 def start(update, context):
