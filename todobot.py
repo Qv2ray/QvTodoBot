@@ -82,7 +82,8 @@ def received_information(update, context):
         if category == 'Add todo':
             todo_list.append(text)
         elif category == 'Remove todo':
-            todo_list.pop(text - 1)
+            index = text - 1
+            todo_list.pop(index)
 
         if not todo_list:
             message = "Nothing to do here."
