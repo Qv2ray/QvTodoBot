@@ -107,7 +107,7 @@ def received_information(update, context):
             message = format_data(todo_list)
 
         update.message.reply_text(message,
-                                  reply_markup=markup)
+                                  reply_markup=markup, parse_mode='Markdown')
     except Exception:
         update.message.reply_text('An error occurred',
                                   reply_markup=ReplyKeyboardRemove())
@@ -127,7 +127,8 @@ def done(update, context):
     else:
         message = format_data(todo_list)
 
-    update.message.reply_text(message, reply_markup=ReplyKeyboardRemove())
+    update.message.reply_text(
+        message, reply_markup=ReplyKeyboardRemove(), parse_mode='Markdown')
 
     user_data.clear()
     return ConversationHandler.END
