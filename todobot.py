@@ -74,14 +74,10 @@ def todo(update, context):
 
 def remove(update, context):
     user_data = context.user_data
-#    try:
-    index = int(update.message.text.split(' ')[1]) - 1
-    todo_list = user_data['todo']
-    todo_list.pop(index)
-    message = format_data(todo_list)
-    update.message.reply_text(message)
-#    except Exception:
-#        update.message.reply_text('An error occurred')
+    try:
+        update.message.reply_text(str(user_data))
+    except Exception:
+        update.message.reply_text('An error occurred')
 
 
 def toggle(update, context):
