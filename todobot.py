@@ -59,7 +59,7 @@ def start(update, context):
 
 def todo(update, context):
     user_id = update.message.from_user.id
-    bot.send_message(text='TBD', chat_id=user_id, reply_markup=markup)
+    bot.send_message(text='/todo', chat_id=user_id, reply_markup=markup)
     return CHOOSING
 
 
