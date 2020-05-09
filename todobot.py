@@ -89,7 +89,7 @@ def toggle(update, context):
     try:
         index = int(update.message.text.split(' ')[1])
         todo_list = user_data['todo']
-        
+
         if emojize(":white_heavy_check_mark:") not in todo_list[index]:
             todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
         else:
@@ -139,6 +139,8 @@ def main():
 
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("todo", todo))
+    dp.add_handler(CommandHandler("remove", remove))
+    dp.add_handler(CommandHandler("toggle", toggle))
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
