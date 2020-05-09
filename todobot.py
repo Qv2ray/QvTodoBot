@@ -18,7 +18,7 @@ import os
 
 from telegram import Bot
 from telegram.ext import (Updater, CommandHandler,
-                          MessageHandler, Filters, DictPersistence)
+                          MessageHandler, Filters, PicklePersistence)
 from emoji import emojize
 
 token = os.getenv('TOKEN')
@@ -28,7 +28,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 logger = logging.getLogger(__name__)
-
+pickle = PicklePersistence('telegram_data')
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -49,7 +49,10 @@ def start(update, context):
 # Getting data from JSON (TODO)
 
 def gettodo(update, context):
-    user_data = context.user_data
+    if pickle.get_user_data():
+        user_data = pickle.get_user_data()
+    else:
+        user_data = context.user_data
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
