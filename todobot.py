@@ -75,7 +75,7 @@ def todo(update, context):
 def remove(update, context):
     user_data = context.user_data
     try:
-        index = int(update.message.text.split(' ')[1])
+        index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
         todo_list.pop(index)
         message = format_data(todo_list)
@@ -87,7 +87,7 @@ def remove(update, context):
 def toggle(update, context):
     user_data = context.user_data
     try:
-        index = int(update.message.text.split(' ')[1])
+        index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
 
         if emojize(":white_heavy_check_mark:") not in todo_list[index]:
