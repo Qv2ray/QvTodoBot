@@ -16,7 +16,7 @@ bot.
 import logging
 import os
 
-from telegram import Bot, ParseMode
+from telegram import Bot
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler, DictPersistence)
@@ -107,7 +107,7 @@ def received_information(update, context):
             message = format_data(todo_list)
 
         update.message.reply_text(message,
-                                  reply_markup=markup, parse_mode=ParseMode.MARKDOWN)
+                                  reply_markup=markup, parse_mode='Markdown')
     except Exception:
         update.message.reply_text('An error occurred',
                                   reply_markup=ReplyKeyboardRemove())
@@ -128,7 +128,7 @@ def done(update, context):
         message = format_data(todo_list)
 
     update.message.reply_text(
-        message, reply_markup=ReplyKeyboardRemove(), parse_mode=ParseMode.MARKDOWN)
+        message, reply_markup=ReplyKeyboardRemove(), parse_mode='Markdown')
 
     user_data.clear()
     return ConversationHandler.END
