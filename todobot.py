@@ -44,7 +44,8 @@ markup = ReplyKeyboardMarkup(reply_keyboard)
 
 
 def format_data(data):
-    formatted_data = '\n'.join([f'{i + 1}. {data[i]}' for i in range(len(data))])
+    formatted_data = '\n'.join(
+        [f'{i + 1}. {data[i]}' for i in range(len(data))])
     return formatted_data
 
 
@@ -84,9 +85,21 @@ def received_information(update, context):
         elif category == 'Remove todo':
             try:
                 index = int(text) - 1
-            except TypeError:
+            except ValueError:
                 index = text
             todo_list.pop(index)
+        elif category == 'Update todo':
+            try:
+                index = int(text) - 1
+            except ValueError:
+                index = text
+            todo_list[index] = text
+        elif category == 'Toggle todo':
+            try:
+                index = int(text) - 1
+            except ValueError:
+                index = text
+            todo_list[index] = f'~~{todo_list[index]}~~'
 
         if not todo_list:
             message = "Nothing to do here."
@@ -109,7 +122,10 @@ def done(update, context):
     todo_list = user_data['todo']
     if 'choice' in user_data:
         del user_data['choice']
-    message = format_data(todo_list)
+    if not todo_list:
+        message = 'Nothing to do here.'
+    else:
+        message = format_data(todo_list)
 
     update.message.reply_text(message, reply_markup=ReplyKeyboardRemove())
 
