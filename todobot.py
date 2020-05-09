@@ -41,6 +41,12 @@ def format_data(data):
         [f'{i + 1}. {data[i]}' for i in range(len(data))])
     return formatted_data
 
+def handle_initial_data(pickle_data, context): 
+    if not context.user_data:
+        data = pickle_data
+    else:
+        data = context.user_data
+    return data
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -49,7 +55,8 @@ def start(update, context):
 # Getting data from JSON (TODO)
 
 def gettodo(update, context):
-    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    user_data = handle_initial_data(pickle_data, context)
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
@@ -64,7 +71,8 @@ def gettodo(update, context):
 
 
 def todo(update, context):
-    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    user_data = handle_initial_data(pickle_data, context)
     try:
         text = update.message.text.split(' ')[1:]
         if text:
@@ -86,7 +94,8 @@ def todo(update, context):
 
 
 def remove(update, context):
-    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    user_data = handle_initial_data(pickle_data, context)
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
@@ -105,7 +114,8 @@ def done(update, context):
 
 
 def toggle(update, context):
-    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+    user_data = handle_initial_data(pickle_data, context)
     try:
         index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
