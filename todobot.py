@@ -48,6 +48,16 @@ def start(update, context):
 
 # Getting data from JSON (TODO)
 
+def gettodo(update, context):
+    user_data = context.user_data
+    try:
+        todo_list = user_data['todo']
+        message = format_data(todo_list)
+        update.message.reply_text(message)
+    except Exception:
+        message = 'Nothing to do here.'
+        update.message.reply_text(message)
+
 # Manipulating data (TODO)
 
 # Add todo
