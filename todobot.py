@@ -54,59 +54,19 @@ def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
 
-# Getting data from JSON
+# Getting data from JSON (TODO)
+
+# Add todo
 
 
 def todo(update, context):
-    user_id = update.message.from_user.id
-    bot.send_message(text='/todo', chat_id=user_id, reply_markup=markup)
-    return CHOOSING
-
-
-# Manipulating data
-
-def regular_choice(update, context):
-    text = update.message.text
-    context.user_data['choice'] = text
-    bot.delete_message(chat_id=update.message.chat.id, message_id=update.message.message_id)
-
-    return TYPING_REPLY
-
-
-def received_information(update, context):
     user_data = context.user_data
-    text = update.message.text
-    category = user_data['choice']
-    del user_data['choice']
     try:
+        text = update.message.text.split(' ')[1]
         if 'todo' not in user_data:
             user_data['todo'] = []
         todo_list = user_data['todo']
-
-        if category == 'Add todo':
-            todo_list.append(text)
-        elif category == 'Remove todo':
-            try:
-                index = int(text) - 1
-            except ValueError:
-                index = text
-            todo_list.pop(index)
-        elif category == 'Update todo':
-            try:
-                index = int(text) - 1
-            except ValueError:
-                index = text
-            todo_list[index] = text
-        elif category == 'Toggle todo':
-            try:
-                index = int(text) - 1
-            except ValueError:
-                index = text
-            if emojize(":white_heavy_check_mark:") not in todo_list[index]:
-                todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
-            else:
-                todo_list[index] = todo_list[index].replace(emojize(":white_heavy_check_mark:"), '')
-
+        todo_list.append(text)
         if not todo_list:
             message = "Nothing to do here."
         else:
@@ -115,24 +75,9 @@ def received_information(update, context):
         update.message.reply_text(message,
                                   reply_markup=markup)
     except Exception:
-        update.message.reply_text('An error occurred',
-                                  reply_markup=ReplyKeyboardRemove())
+        update.message.reply_text('An error occurred')
 
-    return CHOOSING
-
-# Saving data to JSON
-
-
-def done(update, context):
-    user_data = context.user_data
-    if 'choice' in user_data:
-        del user_data['choice']
-
-    update.message.reply_text(
-        'Done!', reply_markup=ReplyKeyboardRemove())
-
-    user_data.clear()
-    return ConversationHandler.END
+# Manipulating data (TODO)
 
 
 def dart(update, context):
@@ -155,11 +100,6 @@ def dice(update, context):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
 
 
-def showadmins(update, context):
-    admins = bot.get_chat_administrators(chat_id=update.message.chat_id)
-    update.message.reply_text(admins)
-
-
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -175,29 +115,11 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
-    conv_handler = ConversationHandler(
-        entry_points=[CommandHandler('todo', todo)],
-
-        states={
-            CHOOSING: [MessageHandler(Filters.regex('^(Add todo|Remove todo|Update todo|Toggle todo)$'),
-                                      regular_choice)
-                       ],
-
-            TYPING_REPLY: [MessageHandler(Filters.text,
-                                          received_information),
-                           ],
-        },
-
-        fallbacks=[MessageHandler(Filters.regex('^Done$'), done)]
-    )
-
-    dp.add_handler(conv_handler)
-
     # on different commands - answer in Telegram
+    dp.add_handler(CommandHandler("todo", todo))
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
-    dp.add_handler(CommandHandler("showadmins", showadmins))
 
     # log all errors
     dp.add_error_handler(error)
