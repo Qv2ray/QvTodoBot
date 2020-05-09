@@ -106,8 +106,8 @@ def received_information(update, context):
         else:
             message = format_data(todo_list)
 
-        bot.send_message(chat_id=update.message.chat_id, text=message,
-                         reply_markup=markup, parse_mode='Markdown')
+        update.message.reply_text(message,
+                                  reply_markup=markup, parse_mode='Markdown')
     except Exception:
         update.message.reply_text('An error occurred',
                                   reply_markup=ReplyKeyboardRemove())
@@ -127,8 +127,8 @@ def done(update, context):
     else:
         message = format_data(todo_list)
 
-    bot.send_message(chat_id=update.message.chat_id, text=message,
-                     reply_markup=ReplyKeyboardRemove(), parse_mode='Markdown')
+    update.message.reply_text(
+        message, reply_markup=ReplyKeyboardRemove(), parse_mode='Markdown')
 
     user_data.clear()
     return ConversationHandler.END
