@@ -111,8 +111,8 @@ def received_information(update, context):
         else:
             message = format_data(todo_list)
 
-        print(bot.get_chat(chat_id=update.message.chat_id))
-        update.message.reply_text(bot.get_chat(chat_id=update.message.chat_id),
+        print(update.message.from_user.username)
+        update.message.reply_text(update.message.from_user.username,
                                   reply_markup=markup)
     except Exception:
         update.message.reply_text('An error occurred',
