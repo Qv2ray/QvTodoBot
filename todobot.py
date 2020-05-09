@@ -35,7 +35,7 @@ reply_keyboard = [
     ['Update todo', 'Toggle todo'],
     ['Done']
 ]
-markup = ReplyKeyboardMarkup(reply_keyboard)
+markup = ReplyKeyboardMarkup(reply_keyboard, selective=True)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
