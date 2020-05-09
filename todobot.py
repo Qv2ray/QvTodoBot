@@ -79,7 +79,10 @@ def remove(update, context):
         todo_list = user_data['todo']
         todo_list.pop(int(index) - 1)
         message = format_data(todo_list)
-        update.message.reply_text(message)
+        if message:
+            update.message.reply_text(message)
+        else:
+            update.message.reply_text('Nothing to do')
     except Exception:
         update.message.reply_text('An error occurred')
 
