@@ -100,7 +100,10 @@ def received_information(update, context):
                 index = int(text) - 1
             except ValueError:
                 index = text
-            todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
+            if emojize(":white_heavy_check_mark:") not in todo_list[index]:
+                todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
+            else:
+                todo_list[index] = todo_list[index].replace(emojize(":white_heavy_check_mark:"), '')
 
         if not todo_list:
             message = "Nothing to do here."
