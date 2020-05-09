@@ -58,7 +58,8 @@ def start(update, context):
 
 
 def todo(update, context):
-    update.message.reply_text('TBD', reply_markup=markup)
+    user_id = update.message.from_user.id
+    bot.send_message(text='TBD', chat_id=user_id, reply_markup=markup)
     return CHOOSING
 
 
@@ -111,8 +112,7 @@ def received_information(update, context):
         else:
             message = format_data(todo_list)
 
-        print(update.message.from_user)
-        update.message.reply_text(str(update.message.from_user),
+        update.message.reply_text(message,
                                   reply_markup=markup)
     except Exception:
         update.message.reply_text('An error occurred',
