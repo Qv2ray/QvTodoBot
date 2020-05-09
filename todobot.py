@@ -49,10 +49,7 @@ def start(update, context):
 # Getting data from JSON (TODO)
 
 def gettodo(update, context):
-    if pickle.get_user_data():
-        user_data = dict(pickle.get_user_data())[update.message.chat_id]
-    else:
-        user_data = context.user_data
+    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
@@ -67,7 +64,7 @@ def gettodo(update, context):
 
 
 def todo(update, context):
-    user_data = context.user_data
+    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
     try:
         text = update.message.text.split(' ')[1:]
         if text:
@@ -89,7 +86,7 @@ def todo(update, context):
 
 
 def remove(update, context):
-    user_data = context.user_data
+    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
@@ -108,7 +105,7 @@ def done(update, context):
 
 
 def toggle(update, context):
-    user_data = context.user_data
+    user_data = dict(pickle.get_user_data())[update.message.from_user.id]
     try:
         index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
