@@ -44,7 +44,7 @@ markup = ReplyKeyboardMarkup(reply_keyboard)
 
 
 def format_data(data):
-    formatted_data = '\n'.join(data)
+    formatted_data = '\n'.join([f'{i + 1}.{data[i]}' for i in range(len(data))])
     return formatted_data
 
 
@@ -80,7 +80,9 @@ def received_information(update, context):
         todo_list = user_data['todo']
 
         if category == 'Add todo':
-            todo_list.append(f'{len(todo_list) + 1}. {text}')
+            todo_list.append(text)
+        elif category == 'Remove todo':
+            todo_list.pop(text)
 
         if not todo_list:
             message = "Nothing to do here."
