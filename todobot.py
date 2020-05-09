@@ -49,17 +49,18 @@ def start(update, context):
 # Getting data from JSON (TODO)
 
 def gettodo(update, context):
-    if pickle.get_user_data():
-        user_data = pickle.get_user_data()
-    else:
-        user_data = context.user_data
-    try:
-        todo_list = user_data['todo']
-        message = format_data(todo_list)
-        update.message.reply_text(message)
-    except Exception:
-        message = 'Nothing to do here.'
-        update.message.reply_text(message)
+    # if pickle.get_user_data():
+    #     user_data = pickle.get_user_data()
+    # else:
+    #     user_data = context.user_data
+    # try:
+    #     todo_list = user_data['todo']
+    #     message = format_data(todo_list)
+    #     update.message.reply_text(message)
+    # except Exception:
+    #     message = 'Nothing to do here.'
+    #     update.message.reply_text(message)
+    update.message.reply_text(str(pickle.get_user_data()))
 
 # Manipulating data (TODO)
 
@@ -103,7 +104,6 @@ def remove(update, context):
         update.message.reply_text('An error occurred')
 
 def done(update, context):
-    user_data = context.user_data
     pickle.flush()
 
 
