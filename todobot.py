@@ -20,6 +20,7 @@ from telegram import Bot
 from telegram import (ReplyKeyboardMarkup, ReplyKeyboardRemove)
 from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters,
                           ConversationHandler, DictPersistence)
+from emoji import emojize
 
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
@@ -99,7 +100,7 @@ def received_information(update, context):
                 index = int(text) - 1
             except ValueError:
                 index = text
-            todo_list[index] = f'~~{todo_list[index]}~~'
+            todo_list[index] = f'{todo_list[index] emojize(":white_heavy_check_mark:")}'
 
         if not todo_list:
             message = "Nothing to do here."
@@ -107,7 +108,7 @@ def received_information(update, context):
             message = format_data(todo_list)
 
         update.message.reply_text(message,
-                                  reply_markup=markup, parse_mode='Markdown')
+                                  reply_markup=markup)
     except Exception:
         update.message.reply_text('An error occurred',
                                   reply_markup=ReplyKeyboardRemove())
@@ -128,7 +129,7 @@ def done(update, context):
         message = format_data(todo_list)
 
     update.message.reply_text(
-        message, reply_markup=ReplyKeyboardRemove(), parse_mode='Markdown')
+        message, reply_markup=ReplyKeyboardRemove())
 
     user_data.clear()
     return ConversationHandler.END
