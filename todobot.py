@@ -36,7 +36,7 @@ reply_keyboard = [
     ['Update todo', 'Toggle todo'],
     ['Done']
 ]
-markup = ReplyKeyboardMarkup(reply_keyboard, selective=True)
+markup = ReplyKeyboardMarkup(reply_keyboard)
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
@@ -67,6 +67,7 @@ def todo(update, context):
 def regular_choice(update, context):
     text = update.message.text
     context.user_data['choice'] = text
+    bot.delete_message(chat_id=update.message.chat.id, message_id=update.message.message_id)
 
     return TYPING_REPLY
 
