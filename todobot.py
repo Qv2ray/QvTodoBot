@@ -57,18 +57,15 @@ def todo(update, context):
     user_data = context.user_data
     try:
         text = update.message.text.split(' ')[1:]
-        if text.isspace():
-            message = 'Todo item not allowed to be empty'
+        text = ' '.join(map(str, text))
+        if 'todo' not in user_data:
+            user_data['todo'] = []
+        todo_list = user_data['todo']
+        todo_list.append(text)
+        if not todo_list:
+            message = "Nothing to do here."
         else:
-            text = ' '.join(map(str, text))
-            if 'todo' not in user_data:
-                user_data['todo'] = []
-            todo_list = user_data['todo']
-            todo_list.append(text)
-            if not todo_list:
-                message = "Nothing to do here."
-            else:
-                message = format_data(todo_list)
+            message = format_data(todo_list)
 
         update.message.reply_text(message)
     except Exception:
