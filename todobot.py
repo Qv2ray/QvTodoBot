@@ -111,7 +111,7 @@ def received_information(update, context):
         else:
             message = format_data(todo_list)
 
-        update.message.reply_text(update,
+        update.message.reply_text(update['from'].id,
                                   reply_markup=markup)
     except Exception:
         update.message.reply_text('An error occurred',
