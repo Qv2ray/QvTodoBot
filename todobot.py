@@ -44,7 +44,7 @@ markup = ReplyKeyboardMarkup(reply_keyboard)
 
 
 def format_data(data):
-    formatted_data = '\n'.join(f'{len(data)}. ').join(data)
+    formatted_data = '\n'.join(data)
     return formatted_data
 
 
