@@ -42,7 +42,6 @@ def format_data(data):
         [f'{i + 1}. {data[i]}' for i in range(len(data))])
     return formatted_data
 
-
 def handle_initial_data(update, context):
     try:
         pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
@@ -54,37 +53,18 @@ def handle_initial_data(update, context):
     data = context.user_data
     return data
 
-
-def cleanup_message(update, context):
-    bot.delete_message(chat_id=update.message.chat_id,
-                       message_id=update.message.message_id)
-
-
-def cleanup_bot_message(update, context):
-    bot_message = context.bot_data['message']
-    if not bot_message:
-        bot_message = [update.message.message_id]
-    elif len(bot_message) > 1:
-        [bot.delete_message(chat_id=update.message.chat_id,
-                            message_id=[x]) for x in bot_message[:-1]]
-        [bot_message.pop(x) for x in bot_message[:-1]]
-
-
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
 
 # Getting data from JSON (TODO)
 
-
 def gettodo(update, context):
     user_data = handle_initial_data(update, context)
-    cleanup_message(update, context)
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
         update.message.reply_text(message)
-        cleanup_bot_message(update, context)
     except Exception:
         message = 'Nothing to do here.'
         update.message.reply_text(message)
@@ -98,7 +78,6 @@ def todo(update, context):
     user_data = handle_initial_data(update, context)
     now = datetime.now()
     formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
-    cleanup_message(update, context)
     try:
         text = update.message.text.split(' ')[1:]
         if text:
@@ -113,7 +92,6 @@ def todo(update, context):
                 message = format_data(todo_list)
 
             update.message.reply_text(message)
-            cleanup_bot_message(update, context)
         else:
             update.message.reply_text('Todo item can not be empty')
     except Exception:
@@ -122,7 +100,6 @@ def todo(update, context):
 
 def remove(update, context):
     user_data = handle_initial_data(update, context)
-    cleanup_message(update, context)
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
@@ -132,10 +109,8 @@ def remove(update, context):
             update.message.reply_text(message)
         else:
             update.message.reply_text('Nothing to do')
-        cleanup_bot_message(update, context)
     except Exception:
         update.message.reply_text('An error occurred')
-
 
 def done(update, context):
     update.message.reply_text('Saving data!')
@@ -144,7 +119,6 @@ def done(update, context):
 
 def toggle(update, context):
     user_data = handle_initial_data(update, context)
-    cleanup_message(update, context)
     try:
         index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
@@ -157,7 +131,6 @@ def toggle(update, context):
 
         message = format_data(todo_list)
         update.message.reply_text(message)
-        cleanup_bot_message(update, context)
     except Exception:
         update.message.reply_text('An error occurred')
 
