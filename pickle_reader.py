@@ -1,6 +1,4 @@
 import pickle
 
-with open('todobot.py', 'rb') as f:
-    data = pickle.load(f)
-
-print(data)
+with open('telegram_data.pickle', 'rb') as f:
+    print(pickle.load(f))
