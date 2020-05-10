@@ -42,6 +42,7 @@ def format_data(data):
         [f'{i + 1}. {data[i]}' for i in range(len(data))])
     return formatted_data
 
+
 def handle_initial_data(update, context):
     try:
         pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
@@ -53,11 +54,13 @@ def handle_initial_data(update, context):
     data = context.user_data
     return data
 
+
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
 
 # Getting data from JSON (TODO)
+
 
 def gettodo(update, context):
     user_data = handle_initial_data(update, context)
@@ -112,8 +115,8 @@ def remove(update, context):
     except Exception:
         update.message.reply_text('An error occurred')
 
+
 def done(update, context):
-    update.message.reply_text('Saving data!')
     pickle.flush()
 
 
@@ -170,6 +173,9 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
+    save_data = MessageHandler(Filters.chat(
+        username=bot.get_me()['username']), callback=done)
+
     # on different commands - answer in Telegram
     dp.add_handler(CommandHandler("todo", todo))
     dp.add_handler(CommandHandler("remove", remove))
@@ -178,7 +184,7 @@ def main():
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("gettodo", gettodo))
-    dp.add_handler(CommandHandler("done", done))
+    dp.add_handler(save_data)
 
     # log all errors
     dp.add_error_handler(error)
