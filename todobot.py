@@ -61,13 +61,13 @@ def start(update, context):
 
 def gettodo(update, context):
     user_data = handle_initial_data(update, context)
-    # try:
-    #     todo_list = user_data['todo']
-    #     message = format_data(todo_list)
-    #     update.message.reply_text(message)
-    # except Exception:
-    #     message = 'Nothing to do here.'
-    #     update.message.reply_text(message)
+    try:
+        todo_list = user_data['todo']
+        message = format_data(todo_list)
+        update.message.reply_text(message)
+    except Exception:
+        message = 'Nothing to do here.'
+        update.message.reply_text(message)
     update.message.reply_text(str(user_data))
 
 # Manipulating data (TODO)
