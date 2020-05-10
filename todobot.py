@@ -20,6 +20,7 @@ from telegram import Bot
 from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, PicklePersistence)
 from emoji import emojize
+from datetime import datetime
 
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
@@ -76,6 +77,8 @@ def gettodo(update, context):
 
 def todo(update, context):
     user_data = handle_initial_data(update, context)
+    now = datetime.now()
+    formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
     try:
         text = update.message.text.split(' ')[1:]
         if text:
@@ -83,7 +86,7 @@ def todo(update, context):
             if 'todo' not in user_data:
                 user_data['todo'] = []
             todo_list = user_data['todo']
-            todo_list.append(text)
+            todo_list.append(f'{text} - Created at {formatted_datetime}')
             if not todo_list:
                 message = "Nothing to do here."
             else:
