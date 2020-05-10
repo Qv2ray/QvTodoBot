@@ -47,7 +47,7 @@ def handle_initial_data(update, context):
         pickle_data_exists = True
     except KeyError:
         pickle_data_exists = False
-    if pickle_data_exists:
+    if not context.user_data and pickle_data_exists:
         data = pickle_data
     else:
         data = context.user_data
