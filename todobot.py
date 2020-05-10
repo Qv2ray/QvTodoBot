@@ -68,7 +68,6 @@ def gettodo(update, context):
     except Exception:
         message = 'Nothing to do here.'
         update.message.reply_text(message)
-    update.message.reply_text(str(user_data))
 
 # Manipulating data (TODO)
 
