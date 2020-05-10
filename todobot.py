@@ -42,15 +42,15 @@ def format_data(data):
     return formatted_data
 
 def handle_initial_data(update, context):
-    # try:
-    #     pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-    #     pickle_data_exists = True
-    # except KeyError:
-    #     pickle_data_exists = False
-    # if pickle_data_exists:
-    #     data = pickle_data
-    # else:
-    data = context.user_data
+    try:
+        pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+        pickle_data_exists = True
+    except KeyError:
+        pickle_data_exists = False
+    if pickle_data_exists:
+        data = pickle_data
+    else:
+        data = context.user_data
     return data
 
 def start(update, context):
