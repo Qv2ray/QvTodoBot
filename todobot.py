@@ -41,22 +41,17 @@ def format_data(data):
         [f'{i + 1}. {data[i]}' for i in range(len(data))])
     return formatted_data
 
-
-def handle_initial_data(update):
-    user_id = update.message.from_user.id
+def handle_initial_data(update, context):
     try:
-        pickle_data = dict(pickle.get_user_data())[user_id]
+        pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+        pickle_data_exists = True
     except KeyError:
-        pickle.update_user_data(user_id=user_id, data={})
-        pickle_data = dict(pickle.get_user_data())[user_id]
-    data = pickle_data
+        pickle_data_exists = False
+    if not context.user_data and pickle_data_exists:
+        data = pickle_data
+    else:
+        data = context.user_data
     return data
-
-
-def update_data(update, data):
-    user_id = update.message.from_user.id
-    pickle.update_user_data(user_id=user_id, data=data)
-
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -64,9 +59,8 @@ def start(update, context):
 
 # Getting data from JSON (TODO)
 
-
 def gettodo(update, context):
-    user_data = handle_initial_data(update)
+    user_data = handle_initial_data(update, context)
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
@@ -81,13 +75,13 @@ def gettodo(update, context):
 
 
 def todo(update, context):
-    user_data = handle_initial_data(update)
+    user_data = handle_initial_data(update, context)
     try:
         text = update.message.text.split(' ')[1:]
         if text:
             text = ' '.join(map(str, text))
             if 'todo' not in user_data:
-                update_data(update, data={'todo': []})
+                user_data['todo'] = []
             todo_list = user_data['todo']
             todo_list.append(text)
             if not todo_list:
@@ -95,7 +89,6 @@ def todo(update, context):
             else:
                 message = format_data(todo_list)
 
-            update_data(update, data={'todo': todo_list})
             update.message.reply_text(message)
         else:
             update.message.reply_text('Todo item can not be empty')
@@ -104,12 +97,11 @@ def todo(update, context):
 
 
 def remove(update, context):
-    user_data = handle_initial_data(update)
+    user_data = handle_initial_data(update, context)
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
         todo_list.pop(int(index) - 1)
-        update_data(update, data={'todo': todo_list})
         message = format_data(todo_list)
         if message:
             update.message.reply_text(message)
@@ -118,14 +110,13 @@ def remove(update, context):
     except Exception:
         update.message.reply_text('An error occurred')
 
-
-# def done(update, context):
-#     update.message.reply_text('Saving data!')
-#     pickle.flush()
+def done(update, context):
+    update.message.reply_text('Saving data!')
+    pickle.flush()
 
 
 def toggle(update, context):
-    user_data = handle_initial_data(update)
+    user_data = handle_initial_data(update, context)
     try:
         index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
@@ -136,7 +127,6 @@ def toggle(update, context):
             todo_list[index] = todo_list[index].replace(
                 emojize(":white_heavy_check_mark:"), '')
 
-        update_data(update, data={'todo': todo_list})
         message = format_data(todo_list)
         update.message.reply_text(message)
     except Exception:
@@ -186,7 +176,7 @@ def main():
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("gettodo", gettodo))
-    # dp.add_handler(CommandHandler("done", done))
+    dp.add_handler(CommandHandler("done", done))
 
     # log all errors
     dp.add_error_handler(error)
