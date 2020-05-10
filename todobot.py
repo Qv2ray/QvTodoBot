@@ -119,9 +119,9 @@ def remove(update, context):
         update.message.reply_text('An error occurred')
 
 
-def done(update, context):
-    update.message.reply_text('Saving data!')
-    pickle.flush()
+# def done(update, context):
+#     update.message.reply_text('Saving data!')
+#     pickle.flush()
 
 
 def toggle(update, context):
@@ -186,7 +186,7 @@ def main():
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("gettodo", gettodo))
-    dp.add_handler(CommandHandler("done", done))
+    # dp.add_handler(CommandHandler("done", done))
 
     # log all errors
     dp.add_error_handler(error)
