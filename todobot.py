@@ -22,6 +22,8 @@ from telegram.ext import (Updater, CommandHandler,
 from emoji import emojize
 from datetime import datetime
 
+import parser
+
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
 # Enable logging
@@ -135,9 +137,10 @@ def toggle(update, context):
 
 
 def dart(update, context):
-    text = update.message.text
+    text = update.message.text[6:]
+    nsp = parser.NumericStringParser()
     try:
-        times = int(text.split(' ')[1])
+        times = int(nsp.eval(text))
     except Exception:
         times = 1
     for i in range(times):
@@ -145,9 +148,10 @@ def dart(update, context):
 
 
 def dice(update, context):
-    text = update.message.text
+    text = update.message.text[6:]
+    nsp = parser.NumericStringParser()
     try:
-        times = int(text.split(' ')[1])
+        times = int(nsp.eval(text))
     except Exception:
         times = 1
     for i in range(times):
