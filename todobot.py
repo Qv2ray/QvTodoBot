@@ -45,17 +45,6 @@ def format_data(data):
     return formatted_data
 
 
-def handle_initial_data(update, context):
-    try:
-        pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-        pickle_data_exists = True
-    except KeyError:
-        pickle_data_exists = False
-    if not context.user_data and pickle_data_exists:
-        context.user_data = pickle_data
-    data = context.user_data
-    return data
-
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -65,7 +54,7 @@ def start(update, context):
 
 
 def gettodo(update, context):
-    user_data = handle_initial_data(update, context)
+    user_data = context.user_data
     try:
         todo_list = user_data['todo']
         message = format_data(todo_list)
@@ -80,7 +69,7 @@ def gettodo(update, context):
 
 
 def todo(update, context):
-    user_data = handle_initial_data(update, context)
+    user_data = context.user_data
     now = datetime.now()
     formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
     try:
@@ -104,7 +93,7 @@ def todo(update, context):
 
 
 def remove(update, context):
-    user_data = handle_initial_data(update, context)
+    user_data = context.user_data
     try:
         index = update.message.text.split(' ')[1]
         todo_list = user_data['todo']
@@ -119,7 +108,7 @@ def remove(update, context):
 
 
 def toggle(update, context):
-    user_data = handle_initial_data(update, context)
+    user_data = context.user_data
     try:
         index = int(update.message.text.split(' ')[1]) - 1
         todo_list = user_data['todo']
