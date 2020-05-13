@@ -46,16 +46,11 @@ def format_data(data):
 
 
 def handle_initial_data(update, context):
-    try:
-        pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
-        pickle_data_exists = True
-    except KeyError:
-        pickle_data_exists = False
-    if not context.user_data and pickle_data_exists:
-        return pickle_data
-    else:
-        return context.user_data
-
+    user_id = update.message.from_user.id
+    pickle_data = pickle.get_user_data()
+    if not user_id in pickle_data:
+        pickle_data[user_id] = dict()
+    return pickle_data[user_id]
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -184,7 +179,7 @@ def main():
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("gettodo", gettodo))
-    dp.add_handler(CommandHandler("debug", debug))
+    # dp.add_handler(CommandHandler("debug", debug))
 
     # log all errors
     dp.add_error_handler(error)
