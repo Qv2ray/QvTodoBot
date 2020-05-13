@@ -146,6 +146,9 @@ def dart(update, context):
     for i in range(times):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎯')
 
+def debug(update, context):
+    update.message.reply_text(pickle.get_user_data())
+
 
 def dice(update, context):
     text = update.message.text[6:]
@@ -181,6 +184,7 @@ def main():
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("gettodo", gettodo))
+    dp.add_handler(CommandHandler("debug", debug))
 
     # log all errors
     dp.add_error_handler(error)
