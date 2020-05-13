@@ -46,11 +46,16 @@ def format_data(data):
 
 
 def handle_initial_data(update, context):
-    user_id = update.message.from_user.id
-    pickle_data = pickle.get_user_data()
-    if not user_id in pickle_data:
-        pickle_data[user_id] = dict()
-    return pickle_data[user_id]
+    try:
+        pickle_data = dict(pickle.get_user_data())[update.message.from_user.id]
+        pickle_data_exists = True
+    except KeyError:
+        pickle_data_exists = False
+    if not context.user_data and pickle_data_exists:
+        context.user_data = pickle_data
+    data = context.user_data
+    return data
+
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -94,7 +99,6 @@ def todo(update, context):
             update.message.reply_text(message)
         else:
             update.message.reply_text('Todo item can not be empty')
-        pickle.flush()
     except Exception:
         update.message.reply_text('An error occurred')
 
@@ -110,7 +114,6 @@ def remove(update, context):
             update.message.reply_text(message)
         else:
             update.message.reply_text('Nothing to do')
-        pickle.flush()
     except Exception:
         update.message.reply_text('An error occurred')
 
@@ -129,7 +132,6 @@ def toggle(update, context):
 
         message = format_data(todo_list)
         update.message.reply_text(message)
-        pickle.flush()
     except Exception:
         update.message.reply_text('An error occurred')
 
@@ -143,9 +145,6 @@ def dart(update, context):
         times = 1
     for i in range(times):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎯')
-
-def debug(update, context):
-    update.message.reply_text(pickle.get_user_data())
 
 
 def dice(update, context):
@@ -182,7 +181,6 @@ def main():
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("gettodo", gettodo))
-    # dp.add_handler(CommandHandler("debug", debug))
 
     # log all errors
     dp.add_error_handler(error)
