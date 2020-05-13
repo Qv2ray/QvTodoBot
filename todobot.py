@@ -94,6 +94,7 @@ def todo(update, context):
             update.message.reply_text(message)
         else:
             update.message.reply_text('Todo item can not be empty')
+        pickle.flush()
     except Exception:
         update.message.reply_text('An error occurred')
 
@@ -109,6 +110,7 @@ def remove(update, context):
             update.message.reply_text(message)
         else:
             update.message.reply_text('Nothing to do')
+        pickle.flush()
     except Exception:
         update.message.reply_text('An error occurred')
 
@@ -127,6 +129,7 @@ def toggle(update, context):
 
         message = format_data(todo_list)
         update.message.reply_text(message)
+        pickle.flush()
     except Exception:
         update.message.reply_text('An error occurred')
 
