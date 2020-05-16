@@ -73,7 +73,7 @@ def todo(update, context):
     now = datetime.now()
     formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
     try:
-        text = ''.join(map(str, update.message.text.split(' ')[1:]))
+        text = update.message.text.split(' ')[1:]
         if text:
             text = ' '.join(map(str, text))
             if 'todo' not in user_data:
