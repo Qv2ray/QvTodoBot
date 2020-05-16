@@ -147,6 +147,17 @@ def dice(update, context):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
 
 
+def basketball(update, context):
+    text = update.message.text[6:]
+    nsp = parser.NumericStringParser()
+    try:
+        times = int(nsp.eval(text))
+    except Exception:
+        times = 1
+    for i in range(times):
+        bot.send_dice(chat_id=update.message.chat_id, emoji='🏀')
+
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -169,6 +180,7 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("dart", dart))
     dp.add_handler(CommandHandler("dice", dice))
+    dp.add_handler(CommandHandler("basketball", basketball))
     dp.add_handler(CommandHandler("gettodo", gettodo))
 
     # log all errors
