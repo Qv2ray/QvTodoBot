@@ -126,7 +126,7 @@ def toggle(update, context):
 
 
 def dart(update, context):
-    text = update.message.text[6:]
+    text = update.message.text.split(' ')[1:]
     nsp = parser.NumericStringParser()
     try:
         times = int(nsp.eval(text))
@@ -137,7 +137,7 @@ def dart(update, context):
 
 
 def dice(update, context):
-    text = update.message.text[6:]
+    text = update.message.text.split(' ')[1:]
     nsp = parser.NumericStringParser()
     try:
         times = int(nsp.eval(text))
@@ -148,7 +148,7 @@ def dice(update, context):
 
 
 def basketball(update, context):
-    text = update.message.text[6:]
+    text = update.message.text.split(' ')[1:]
     nsp = parser.NumericStringParser()
     try:
         times = int(nsp.eval(text))
