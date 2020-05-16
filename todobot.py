@@ -73,7 +73,7 @@ def todo(update, context):
     now = datetime.now()
     formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
     try:
-        text = update.message.text.split(' ')[1:]
+        text = ''.join(map(str, update.message.text.split(' ')[1:]))
         if text:
             text = ' '.join(map(str, text))
             if 'todo' not in user_data:
@@ -126,7 +126,7 @@ def toggle(update, context):
 
 
 def dart(update, context):
-    text = update.message.text.split(' ')[1:]
+    text = ''.join(map(str, update.message.text.split(' ')[1:]))
     nsp = parser.NumericStringParser()
     try:
         times = int(nsp.eval(text))
@@ -137,7 +137,7 @@ def dart(update, context):
 
 
 def dice(update, context):
-    text = update.message.text.split(' ')[1:]
+    text = ''.join(map(str, update.message.text.split(' ')[1:]))
     nsp = parser.NumericStringParser()
     try:
         times = int(nsp.eval(text))
@@ -148,7 +148,7 @@ def dice(update, context):
 
 
 def basketball(update, context):
-    text = update.message.text.split(' ')[1:]
+    text = ''.join(map(str, update.message.text.split(' ')[1:]))
     nsp = parser.NumericStringParser()
     try:
         times = int(nsp.eval(text))
