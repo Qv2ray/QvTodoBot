@@ -16,7 +16,7 @@ bot.
 import logging
 import os
 
-from telegram import Bot
+from telegram import Bot, ParseMode
 from telegram.utils.helpers import escape_markdown
 from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, PicklePersistence)
@@ -86,7 +86,7 @@ def todo(update, context):
             else:
                 message = format_data(todo_list)
 
-            update.message.reply_text(message)
+            update.message.reply_text(message, ParseMode.MARKDOWN_V2)
         else:
             update.message.reply_text('Todo item can not be empty')
     except Exception:
