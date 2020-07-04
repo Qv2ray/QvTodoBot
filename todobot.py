@@ -17,6 +17,7 @@ import logging
 import os
 
 from telegram import Bot
+from telegram.utils.helpers import escape_markdown
 from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, PicklePersistence)
 from emoji import emojize
@@ -73,7 +74,7 @@ def todo(update, context):
     now = datetime.now()
     formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
     try:
-        text = update.message.text.split(' ')[1:]
+        text = escape_markdown(update.message.text.split(' ')[1:], version=2)
         if text:
             text = ' '.join(map(str, text))
             if 'todo' not in user_data:
