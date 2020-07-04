@@ -89,8 +89,9 @@ def todo(update, context):
             update.message.reply_text(message, ParseMode.MARKDOWN_V2)
         else:
             update.message.reply_text('Todo item can not be empty')
-    except Exception:
+    except Exception as e:
         update.message.reply_text('An error occurred')
+        print(repr(e))
 
 
 def remove(update, context):
