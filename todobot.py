@@ -46,7 +46,6 @@ def format_data(data):
     return formatted_data
 
 
-
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
@@ -160,6 +159,17 @@ def basketball(update, context):
         bot.send_dice(chat_id=update.message.chat_id, emoji='🏀')
 
 
+def soccer(update, context):
+    text = ''.join(map(str, update.message.text.split(' ')[1:]))
+    nsp = parser.NumericStringParser()
+    try:
+        times = int(nsp.eval(text))
+    except Exception:
+        times = 1
+    for i in range(times):
+        bot.send_dice(chat_id=update.message.chat_id, emoji='⚽️')
+
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -184,6 +194,7 @@ def main():
     dp.add_handler(CommandHandler("dice", dice))
     dp.add_handler(CommandHandler("basketball", basketball))
     dp.add_handler(CommandHandler("gettodo", gettodo))
+    dp.add_handler(CommandHandler("soccer", soccer))
 
     # log all errors
     dp.add_error_handler(error)
