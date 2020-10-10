@@ -71,7 +71,7 @@ def gettodo(update, context):
 def todo(update, context):
     user_data = context.user_data
     now = datetime.now()
-    formatted_datetime = now.strftime("%Y/%m/%d %H:%M:%S")
+    formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
     try:
         text = update.message.text.split(' ')[1:]
         if text:
@@ -79,7 +79,7 @@ def todo(update, context):
             if 'todo' not in user_data:
                 user_data['todo'] = []
             todo_list = user_data['todo']
-            todo_list.append(f'{text} - Created at {formatted_datetime}')
+            todo_list.append(f'{text} - Created at UTC {formatted_datetime}')
             if not todo_list:
                 message = "Nothing to do here."
             else:
