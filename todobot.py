@@ -170,6 +170,15 @@ def soccer(update, context):
         bot.send_dice(chat_id=update.message.chat_id, emoji='⚽️')
 
 
+def thank(update, context):
+    thank_target = update.message.text.split(' ')[1]
+    update.message.reply_text(f'Thank you so much, {thank_target}!')
+
+
+def thanks(update, context):
+    update.message.reply_text('You\'re welcome!')
+
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -195,6 +204,8 @@ def main():
     dp.add_handler(CommandHandler("basketball", basketball))
     dp.add_handler(CommandHandler("gettodo", gettodo))
     dp.add_handler(CommandHandler("soccer", soccer))
+    dp.add_handler(CommandHandler("thank", thank))
+    dp.add_handler(CommandHandler("thanks", thanks))
 
     # log all errors
     dp.add_error_handler(error)
