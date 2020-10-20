@@ -172,8 +172,9 @@ def soccer(update, context):
 
 
 def thank(update, context):
-    thank_target = update.message.text.split(' ')[1:]
-    update.message.reply_text(f'Thank you so much, {thank_target}!')
+    thank_target = update.message.text.split(' ', 1)[1]
+    if thank_target != "":
+        update.message.reply_text(f'Thank you so much, {thank_target}!')
 
 
 def thanks(update, context):
@@ -190,7 +191,7 @@ def call_cops(update, context):
               "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
               "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
     text = "📱9️⃣1️⃣1️⃣📲📞👌\n"
-    for i in range(random.randint(24, 48)):
+    for i in range(random.randint(24, 96)):
         text += random.choice(emojis)
     bot.send_message(update.message.chat_id, text)
 
