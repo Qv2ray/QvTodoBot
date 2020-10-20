@@ -14,6 +14,7 @@ bot.
 """
 
 import logging
+import random
 import os
 
 from telegram import Bot
@@ -171,12 +172,27 @@ def soccer(update, context):
 
 
 def thank(update, context):
-    thank_target = update.message.text.split(' ')[1]
+    thank_target = update.message.text.split(' ')[1:]
     update.message.reply_text(f'Thank you so much, {thank_target}!')
 
 
 def thanks(update, context):
     update.message.reply_text('You\'re welcome!')
+
+
+def call_cops(update, context):
+    emojis = ["👮‍♀️", "👮🏻‍♀️", "👮🏼‍♀️", "👮🏽‍♀️", "👮🏾‍♀️", "👮🏿‍♀️",
+              "👮‍♂️", "👮🏻‍♂️", "👮🏼‍♂️", "👮🏽‍♂️", "👮🏾‍♂️", "👮🏿‍♂️",
+              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
+    text = "📱9️⃣1️⃣1️⃣📲📞👌\n"
+    for i in range(random.randint(24, 48)):
+        text += random.choice(emojis)
+    bot.send_message(update.message.chat_id, text)
 
 
 def error(update, context):
@@ -206,6 +222,7 @@ def main():
     dp.add_handler(CommandHandler("soccer", soccer))
     dp.add_handler(CommandHandler("thank", thank))
     dp.add_handler(CommandHandler("thanks", thanks))
+    dp.add_handler(CommandHandler("call_cops", call_cops))
 
     # log all errors
     dp.add_error_handler(error)
