@@ -196,6 +196,10 @@ def call_cops(update, context):
     bot.send_message(update.message.chat_id, text)
 
 
+def fuck(update, context):
+    update.message.reply_text(random.choice(["🍑", "🍆"]))
+
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -224,6 +228,7 @@ def main():
     dp.add_handler(CommandHandler("thank", thank))
     dp.add_handler(CommandHandler("thanks", thanks))
     dp.add_handler(CommandHandler("call_cops", call_cops))
+    dp.add_handler(CommandHandler("fuck", fuck))
 
     # log all errors
     dp.add_error_handler(error)
