@@ -14,9 +14,7 @@ bot.
 """
 
 import logging
-import random
 import os
-from typing import List
 from telegram import Bot, Update, Message
 from telegram.ext.callbackcontext import CallbackContext
 from telegram.utils.helpers import escape_markdown
@@ -26,6 +24,7 @@ from telegram.ext import (Updater, CommandHandler,
 
 import todocore
 import dart
+import fun
 
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
@@ -47,40 +46,6 @@ def start(update: Update):
     update.message.reply_text('I love Qv2ray!')
 
 
-def thank(update: Update):
-    assert isinstance(update.message, Message)
-    assert isinstance(update.message.text, str)
-    thank_target = update.message.text.split(' ', 1)[1]
-    if thank_target != "":
-        update.message.reply_text(f'Thank you so much, {thank_target}!')
-
-
-def thanks(update: Update):
-    assert isinstance(update.message, Message)
-    update.message.reply_text('You\'re welcome!')
-
-
-def call_cops(update: Update):
-    assert isinstance(update.message, Message)
-    emojis: List[str] = ["👮‍♀️", "👮🏻‍♀️", "👮🏼‍♀️", "👮🏽‍♀️", "👮🏾‍♀️", "👮🏿‍♀️",
-                         "👮‍♂️", "👮🏻‍♂️", "👮🏼‍♂️", "👮🏽‍♂️", "👮🏾‍♂️", "👮🏿‍♂️",
-                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
-    text: str = "📱9️⃣1️⃣1️⃣📲📞👌\n"
-    for i in range(random.randint(24, 96)):
-        text += random.choice(emojis)
-    bot.send_message(update.message.chat_id, text)
-
-
-def fuck(update: Update):
-    assert isinstance(update.message, Message)
-    update.message.reply_text(random.choice(["🍑", "🍆"]))
-
-
 def error(update: Update, context: CallbackContext):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
@@ -90,6 +55,7 @@ def main():
     """Start the bot."""
     todo_engine = todocore.TodoEngine(bot)
     dart_engine = dart.Darter(bot)
+    fun_engine = fun.HaveSomeFun(bot)
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
@@ -104,10 +70,8 @@ def main():
     for command in dart_engine.getCommands():
         dp.add_handler(command)
 
-    dp.add_handler(CommandHandler("thank", thank))
-    dp.add_handler(CommandHandler("thanks", thanks))
-    dp.add_handler(CommandHandler("call_cops", call_cops))
-    dp.add_handler(CommandHandler("fuck", fuck))
+    for command in fun_engine.getCommands():
+        dp.add_handler(command)
 
     # log all errors
     dp.add_error_handler(error)
