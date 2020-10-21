@@ -4,6 +4,7 @@ from telegram import Update, Message
 from telegram.bot import Bot
 from telegram.ext import CommandHandler, CallbackContext
 
+
 class HaveSomeFun:
     def __init__(self, bot: Bot):
         self.bot = bot
@@ -12,7 +13,8 @@ class HaveSomeFun:
         return [CommandHandler("thank", self.thank),
                 CommandHandler("thanks", self.thanks),
                 CommandHandler("call_cops", self.call_cops),
-                CommandHandler("fuck", self.fuck)]
+                CommandHandler("fuck", self.fuck),
+                CommandHandler("eat", self.eat)]
 
     def thank(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
@@ -31,13 +33,13 @@ class HaveSomeFun:
     def call_cops(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         emojis: List[str] = ["👮‍♀️", "👮🏻‍♀️", "👮🏼‍♀️", "👮🏽‍♀️", "👮🏾‍♀️", "👮🏿‍♀️",
-                            "👮‍♂️", "👮🏻‍♂️", "👮🏼‍♂️", "👮🏽‍♂️", "👮🏾‍♂️", "👮🏿‍♂️",
-                            "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                            "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                            "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                            "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                            "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-                            "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
+                             "👮‍♂️", "👮🏻‍♂️", "👮🏼‍♂️", "👮🏽‍♂️", "👮🏾‍♂️", "👮🏿‍♂️",
+                             "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                             "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                             "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                             "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                             "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                             "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
         text: str = "📱9️⃣1️⃣1️⃣📲📞👌\n"
         for i in range(random.randint(24, 96)):
             text += random.choice(emojis)
@@ -52,7 +54,8 @@ class HaveSomeFun:
             self.bot.send_message(update.message.chat_id,
                                   f'{eater} has eaten {eat_target}! 🍴😋')
         else:
-            update.message.reply_text('You must reply to the target you want to eat!')
+            update.message.reply_text(
+                'You must reply to the target you want to eat!')
 
     def fuck(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
