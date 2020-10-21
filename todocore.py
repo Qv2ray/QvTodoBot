@@ -1,3 +1,4 @@
+from .types import UserData
 from emoji import emojize
 from datetime import datetime
 from telegram import Update, Message
@@ -24,7 +25,7 @@ class TodoEngine:
     def gettodo(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = context.user_data
+        user_data = UserData(context.user_data)
         try:
             todo_list = user_data['todo']
             message = format_data(todo_list)
@@ -36,7 +37,7 @@ class TodoEngine:
     def todo(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = context.user_data
+        user_data = UserData(context.user_data)
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
         try:
@@ -63,7 +64,7 @@ class TodoEngine:
     def remove(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = context.user_data
+        user_data = UserData(context.user_data)
         try:
             index = update.message.text.split(' ')[1]
             todo_list = user_data['todo']
@@ -79,7 +80,7 @@ class TodoEngine:
     def toggle(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = context.user_data
+        user_data = UserData(context.user_data)
         try:
             index = int(update.message.text.split(' ')[1]) - 1
             todo_list = user_data['todo']
