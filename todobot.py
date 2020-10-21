@@ -21,13 +21,14 @@ from telegram import Bot
 from telegram.utils.helpers import escape_markdown
 from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, PicklePersistence)
-from emoji import emojize
-from datetime import datetime
 
-import parser
+
+import todocore
+import dart
 
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
+
 # Enable logging
 logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -38,137 +39,10 @@ pickle = PicklePersistence(filename='telegram_data.pickle')
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
-# Formatting data
-
-
-def format_data(data):
-    formatted_data = '\n'.join(
-        [f'{i + 1}. {data[i]}' for i in range(len(data))])
-    return formatted_data
-
 
 def start(update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('I love Qv2ray!')
-
-# Getting data from JSON (TODO)
-
-
-def gettodo(update, context):
-    user_data = context.user_data
-    try:
-        todo_list = user_data['todo']
-        message = format_data(todo_list)
-        update.message.reply_text(message)
-    except Exception:
-        message = 'Nothing to do here.'
-        update.message.reply_text(message)
-
-# Manipulating data (TODO)
-
-# Add todo
-
-
-def todo(update, context):
-    user_data = context.user_data
-    now = datetime.now()
-    formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
-    try:
-        text = update.message.text.split(' ')[1:]
-        if text:
-            text = ' '.join(map(str, text))
-            if 'todo' not in user_data:
-                user_data['todo'] = []
-            todo_list = user_data['todo']
-            todo_list.append(f'{text} - Created at UTC {formatted_datetime}')
-            if not todo_list:
-                message = "Nothing to do here."
-            else:
-                message = format_data(todo_list)
-
-            update.message.reply_text(message)
-        else:
-            update.message.reply_text('Todo item can not be empty')
-    except Exception as e:
-        update.message.reply_text('An error occurred')
-        print(repr(e))
-
-
-def remove(update, context):
-    user_data = context.user_data
-    try:
-        index = update.message.text.split(' ')[1]
-        todo_list = user_data['todo']
-        todo_list.pop(int(index) - 1)
-        message = format_data(todo_list)
-        if message:
-            update.message.reply_text(message)
-        else:
-            update.message.reply_text('Nothing to do')
-    except Exception:
-        update.message.reply_text('An error occurred')
-
-
-def toggle(update, context):
-    user_data = context.user_data
-    try:
-        index = int(update.message.text.split(' ')[1]) - 1
-        todo_list = user_data['todo']
-
-        if emojize(":white_heavy_check_mark:") not in todo_list[index]:
-            todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
-        else:
-            todo_list[index] = todo_list[index].replace(
-                emojize(":white_heavy_check_mark:"), '')
-
-        message = format_data(todo_list)
-        update.message.reply_text(message)
-    except Exception:
-        update.message.reply_text('An error occurred')
-
-
-def dart(update, context):
-    text = ''.join(map(str, update.message.text.split(' ')[1:]))
-    nsp = parser.NumericStringParser()
-    try:
-        times = int(nsp.eval(text))
-    except Exception:
-        times = 1
-    for i in range(times):
-        bot.send_dice(chat_id=update.message.chat_id, emoji='🎯')
-
-
-def dice(update, context):
-    text = ''.join(map(str, update.message.text.split(' ')[1:]))
-    nsp = parser.NumericStringParser()
-    try:
-        times = int(nsp.eval(text))
-    except Exception:
-        times = 1
-    for i in range(times):
-        bot.send_dice(chat_id=update.message.chat_id, emoji='🎲')
-
-
-def basketball(update, context):
-    text = ''.join(map(str, update.message.text.split(' ')[1:]))
-    nsp = parser.NumericStringParser()
-    try:
-        times = int(nsp.eval(text))
-    except Exception:
-        times = 1
-    for i in range(times):
-        bot.send_dice(chat_id=update.message.chat_id, emoji='🏀')
-
-
-def soccer(update, context):
-    text = ''.join(map(str, update.message.text.split(' ')[1:]))
-    nsp = parser.NumericStringParser()
-    try:
-        times = int(nsp.eval(text))
-    except Exception:
-        times = 1
-    for i in range(times):
-        bot.send_dice(chat_id=update.message.chat_id, emoji='⚽️')
 
 
 def thank(update, context):
@@ -207,24 +81,22 @@ def error(update, context):
 
 def main():
     """Start the bot."""
+    todo_engine = todocore.TodoEngine(bot)
+    dart_engine = dart.Darter(bot)
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
     updater = Updater(token, persistence=pickle, use_context=True)
-
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
-
-    # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("todo", todo))
-    dp.add_handler(CommandHandler("remove", remove))
-    dp.add_handler(CommandHandler("toggle", toggle))
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("dart", dart))
-    dp.add_handler(CommandHandler("dice", dice))
-    dp.add_handler(CommandHandler("basketball", basketball))
-    dp.add_handler(CommandHandler("gettodo", gettodo))
-    dp.add_handler(CommandHandler("soccer", soccer))
+
+    for command in todo_engine.getCommands():
+        dp.add_handler(command)
+
+    for command in dart_engine.getCommands():
+        dp.add_handler(command)
+
     dp.add_handler(CommandHandler("thank", thank))
     dp.add_handler(CommandHandler("thanks", thanks))
     dp.add_handler(CommandHandler("call_cops", call_cops))

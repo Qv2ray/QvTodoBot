@@ -1,3 +1,6 @@
 venv
 __pycache__
 .vscode
+
+bot.log
+telegram_data.pickle
