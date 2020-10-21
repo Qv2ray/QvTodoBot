@@ -17,22 +17,24 @@ import logging
 import os
 from telegram import Bot, Update, Message
 from telegram.ext.callbackcontext import CallbackContext
-from telegram.ext import (Updater, CommandHandler,
-                          PicklePersistence)
-
+from telegram.ext import Updater, CommandHandler, PicklePersistence
+from db import Base, engine
 import todocore
 import dart
 import fun
 
-token = os.getenv('TOKEN')
+token = os.getenv("TOKEN")
 bot = Bot(token=token)
 
 # Enable logging
-logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(
+    filename="bot.log",
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
 
 logger = logging.getLogger(__name__)
-pickle = PicklePersistence(filename='telegram_data.pickle')
+pickle = PicklePersistence(filename="telegram_data.pickle")
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -42,7 +44,7 @@ pickle = PicklePersistence(filename='telegram_data.pickle')
 def start(update: Update):
     """Send a message when the command /start is issued."""
     assert isinstance(update.message, Message)
-    update.message.reply_text('I love Qv2ray!')
+    update.message.reply_text("I love Qv2ray!")
 
 
 def error(update: Update, context: CallbackContext):
@@ -84,5 +86,6 @@ def main():
     updater.idle()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
+    Base.metadata.create_all(engine)
