@@ -39,7 +39,7 @@ pickle = PicklePersistence(filename='telegram_data.pickle')
 # context. Error handlers also receive the raised TelegramError object in error.
 
 
-def start(update: Update):
+def start(update: Update, context: CallbackContext):
     """Send a message when the command /start is issued."""
     assert isinstance(update.message, Message)
     update.message.reply_text('I love Qv2ray!')
