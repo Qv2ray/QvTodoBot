@@ -16,8 +16,9 @@ bot.
 import logging
 import random
 import os
-
-from telegram import Bot
+from typing import List
+from telegram import Bot, Update, Message
+from telegram.ext.callbackcontext import CallbackContext
 from telegram.utils.helpers import escape_markdown
 from telegram.ext import (Updater, CommandHandler,
                           MessageHandler, Filters, PicklePersistence)
@@ -40,41 +41,47 @@ pickle = PicklePersistence(filename='telegram_data.pickle')
 # context. Error handlers also receive the raised TelegramError object in error.
 
 
-def start(update, context):
+def start(update: Update):
     """Send a message when the command /start is issued."""
+    assert isinstance(update.message, Message)
     update.message.reply_text('I love Qv2ray!')
 
 
-def thank(update, context):
+def thank(update: Update):
+    assert isinstance(update.message, Message)
+    assert isinstance(update.message.text, str)
     thank_target = update.message.text.split(' ', 1)[1]
     if thank_target != "":
         update.message.reply_text(f'Thank you so much, {thank_target}!')
 
 
-def thanks(update, context):
+def thanks(update: Update):
+    assert isinstance(update.message, Message)
     update.message.reply_text('You\'re welcome!')
 
 
-def call_cops(update, context):
-    emojis = ["👮‍♀️", "👮🏻‍♀️", "👮🏼‍♀️", "👮🏽‍♀️", "👮🏾‍♀️", "👮🏿‍♀️",
-              "👮‍♂️", "👮🏻‍♂️", "👮🏼‍♂️", "👮🏽‍♂️", "👮🏾‍♂️", "👮🏿‍♂️",
-              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
-              "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
-    text = "📱9️⃣1️⃣1️⃣📲📞👌\n"
+def call_cops(update: Update):
+    assert isinstance(update.message, Message)
+    emojis: List[str] = ["👮‍♀️", "👮🏻‍♀️", "👮🏼‍♀️", "👮🏽‍♀️", "👮🏾‍♀️", "👮🏿‍♀️",
+                         "👮‍♂️", "👮🏻‍♂️", "👮🏼‍♂️", "👮🏽‍♂️", "👮🏾‍♂️", "👮🏿‍♂️",
+                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨",
+                         "🚓", "🚔", "🚨", "🚓", "🚔", "🚨"]
+    text: str = "📱9️⃣1️⃣1️⃣📲📞👌\n"
     for i in range(random.randint(24, 96)):
         text += random.choice(emojis)
     bot.send_message(update.message.chat_id, text)
 
 
-def fuck(update, context):
+def fuck(update: Update):
+    assert isinstance(update.message, Message)
     update.message.reply_text(random.choice(["🍑", "🍆"]))
 
 
-def error(update, context):
+def error(update: Update, context: CallbackContext):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 

@@ -1,7 +1,8 @@
 from emoji import emojize
 from datetime import datetime
-
-from telegram.ext import CommandHandler
+from telegram import Update, Message
+from telegram.bot import Bot
+from telegram.ext import CommandHandler, CallbackContext
 
 
 def format_data(data):
@@ -11,7 +12,7 @@ def format_data(data):
 
 
 class TodoEngine:
-    def __init__(self, bot):
+    def __init__(self, bot: Bot):
         self.bot = bot
 
     def getCommands(self):
@@ -20,7 +21,9 @@ class TodoEngine:
                 CommandHandler("remove", self.remove),
                 CommandHandler("toggle", self.toggle)]
 
-    def gettodo(self, update, context):
+    def gettodo(self, update: Update, context: CallbackContext):
+        assert isinstance(update.message, Message)
+        assert isinstance(update.message.text, str)
         user_data = context.user_data
         try:
             todo_list = user_data['todo']
@@ -30,7 +33,9 @@ class TodoEngine:
             message = 'Nothing to do here.'
             update.message.reply_text(message)
 
-    def todo(self, update, context):
+    def todo(self, update: Update, context: CallbackContext):
+        assert isinstance(update.message, Message)
+        assert isinstance(update.message.text, str)
         user_data = context.user_data
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -55,7 +60,9 @@ class TodoEngine:
             update.message.reply_text('An error occurred')
             print(repr(e))
 
-    def remove(self, update, context):
+    def remove(self, update: Update, context: CallbackContext):
+        assert isinstance(update.message, Message)
+        assert isinstance(update.message.text, str)
         user_data = context.user_data
         try:
             index = update.message.text.split(' ')[1]
@@ -69,7 +76,9 @@ class TodoEngine:
         except Exception:
             update.message.reply_text('An error occurred')
 
-    def toggle(self, update, context):
+    def toggle(self, update: Update, context: CallbackContext):
+        assert isinstance(update.message, Message)
+        assert isinstance(update.message.text, str)
         user_data = context.user_data
         try:
             index = int(update.message.text.split(' ')[1]) - 1
