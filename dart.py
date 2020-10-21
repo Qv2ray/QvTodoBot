@@ -2,13 +2,14 @@ import parser
 from telegram.bot import Bot
 from telegram.ext import CommandHandler, CallbackContext
 from telegram import Update, Message
+from typing import List
 
 
 class Darter:
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    def getCommands(self) -> list[CommandHandler]:
+    def getCommands(self) -> List[CommandHandler]:
         return [CommandHandler("dart", self.dart),
                 CommandHandler("dice", self.dice),
                 CommandHandler("basketball", self.basketball),

@@ -17,10 +17,8 @@ import logging
 import os
 from telegram import Bot, Update, Message
 from telegram.ext.callbackcontext import CallbackContext
-from telegram.utils.helpers import escape_markdown
 from telegram.ext import (Updater, CommandHandler,
-                          MessageHandler, Filters, PicklePersistence)
-
+                          PicklePersistence)
 
 import todocore
 import dart
@@ -35,6 +33,7 @@ logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(level
 
 logger = logging.getLogger(__name__)
 pickle = PicklePersistence(filename='telegram_data.pickle')
+
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.

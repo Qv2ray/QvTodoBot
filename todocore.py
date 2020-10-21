@@ -1,9 +1,10 @@
-from .types import UserData
+from custom_types import UserData
 from emoji import emojize
 from datetime import datetime
 from telegram import Update, Message
 from telegram.bot import Bot
 from telegram.ext import CommandHandler, CallbackContext
+from typing import List
 
 
 def format_data(data):
@@ -16,7 +17,7 @@ class TodoEngine:
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    def getCommands(self) -> list[CommandHandler]:
+    def getCommands(self) -> List[CommandHandler]:
         return [CommandHandler("gettodo", self.gettodo),
                 CommandHandler("todo", self.todo),
                 CommandHandler("remove", self.remove),
@@ -25,7 +26,7 @@ class TodoEngine:
     def gettodo(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = UserData(context.user_data)
+        user_data: UserData = context.user_data
         try:
             todo_list = user_data['todo']
             message = format_data(todo_list)
@@ -37,7 +38,7 @@ class TodoEngine:
     def todo(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = UserData(context.user_data)
+        user_data: UserData = context.user_data
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
         try:
@@ -64,7 +65,7 @@ class TodoEngine:
     def remove(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = UserData(context.user_data)
+        user_data: UserData = context.user_data
         try:
             index = update.message.text.split(' ')[1]
             todo_list = user_data['todo']
@@ -80,7 +81,7 @@ class TodoEngine:
     def toggle(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        user_data = UserData(context.user_data)
+        user_data: UserData = context.user_data
         try:
             index = int(update.message.text.split(' ')[1]) - 1
             todo_list = user_data['todo']
