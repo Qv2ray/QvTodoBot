@@ -8,7 +8,7 @@ class HaveSomeFun:
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    def getCommands(self) -> list[CommandHandler]:
+    def getCommands(self) -> List[CommandHandler]:
         return [CommandHandler("thank", self.thank),
                 CommandHandler("thanks", self.thanks),
                 CommandHandler("call_cops", self.call_cops),
