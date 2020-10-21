@@ -1,4 +1,4 @@
-import parser
+import modules.expression as expression
 from telegram.bot import Bot
 from telegram.ext import CommandHandler, CallbackContext
 from telegram import Update, Message
@@ -19,7 +19,7 @@ class Darter:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         text = ''.join(map(str, update.message.text.split(' ')[1:]))
-        nsp = parser.NumericStringParser()
+        nsp = expression.NumericStringParser()
         try:
             times = int(nsp.eval(text))
         except Exception:
@@ -31,7 +31,7 @@ class Darter:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         text = ''.join(map(str, update.message.text.split(' ')[1:]))
-        nsp = parser.NumericStringParser()
+        nsp = expression.NumericStringParser()
         try:
             times = int(nsp.eval(text))
         except Exception:
@@ -43,7 +43,7 @@ class Darter:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         text = ''.join(map(str, update.message.text.split(' ')[1:]))
-        nsp = parser.NumericStringParser()
+        nsp = expression.NumericStringParser()
         try:
             times = int(nsp.eval(text))
         except Exception:
@@ -55,7 +55,7 @@ class Darter:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         text = ''.join(map(str, update.message.text.split(' ')[1:]))
-        nsp = parser.NumericStringParser()
+        nsp = expression.NumericStringParser()
         try:
             times = int(nsp.eval(text))
         except Exception:

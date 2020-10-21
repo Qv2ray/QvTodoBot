@@ -20,9 +20,9 @@ from telegram.ext.callbackcontext import CallbackContext
 from telegram.ext import (Updater, CommandHandler,
                           PicklePersistence)
 
-import todocore
-import dart
-import fun
+import modules.todocore
+import modules.dart
+import modules.fun
 
 token = os.getenv('TOKEN')
 bot = Bot(token=token)
@@ -48,13 +48,14 @@ def start(update: Update, context: CallbackContext):
 def error(update: Update, context: CallbackContext):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
+    print(context.error)
 
 
 def main():
     """Start the bot."""
-    todo_engine = todocore.TodoEngine(bot)
-    dart_engine = dart.Darter(bot)
-    fun_engine = fun.HaveSomeFun(bot)
+    todo_engine = modules.todocore.TodoEngine(bot)
+    dart_engine = modules.dart.Darter(bot)
+    fun_engine = modules.fun.HaveSomeFun(bot)
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
