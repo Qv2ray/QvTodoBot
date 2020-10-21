@@ -8,7 +8,7 @@ class Darter:
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    def getCommands(self):
+    def getCommands(self) -> list[CommandHandler]:
         return [CommandHandler("dart", self.dart),
                 CommandHandler("dice", self.dice),
                 CommandHandler("basketball", self.basketball),

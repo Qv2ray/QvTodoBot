@@ -15,7 +15,7 @@ class TodoEngine:
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    def getCommands(self):
+    def getCommands(self) -> list[CommandHandler]:
         return [CommandHandler("gettodo", self.gettodo),
                 CommandHandler("todo", self.todo),
                 CommandHandler("remove", self.remove),
