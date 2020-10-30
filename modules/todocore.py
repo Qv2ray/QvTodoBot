@@ -72,19 +72,21 @@ class TodoEngine:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         user_data: UserData = context.user_data
+        todo_list = user_data['todo']
         try:
             parsed_message = update.message.text.split(' ', 1)
             if len(parsed_message) == 2:
                 index = parse_index(parsed_message[1])
-                if (index is not None):
+                if (index is not None and index > 0 and index <= len(todo_list)):
                     index -= 1
-                    todo_list = user_data['todo']
                     todo_list.pop(index)
                     message = format_data(todo_list)
                     if message:
                         update.message.reply_text(message)
                     else:
                         update.message.reply_text('Nothing to do')
+                else:
+                    update.message.reply_text("Invalid index.")
             else:
                 update.message.reply_text("You must specify an index.")
         except Exception:
@@ -94,13 +96,13 @@ class TodoEngine:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         user_data: UserData = context.user_data
+        todo_list = user_data['todo']
         try:
             parsed_message = update.message.text.split(' ', 1)
             if len(parsed_message) == 2:
                 index = parse_index(parsed_message[1])
-                if (index is not None):
+                if (index is not None and index > 0 and index <= len(todo_list)):
                     index -= 1
-                    todo_list = user_data['todo']
                     if emojize(":white_heavy_check_mark:") not in todo_list[index]:
                         todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
                     else:
@@ -108,6 +110,8 @@ class TodoEngine:
                             emojize(":white_heavy_check_mark:"), '')
                     message = format_data(todo_list)
                     update.message.reply_text(message)
+                else:
+                    update.message.reply_text("Invalid index.")
             else:
                 update.message.reply_text("You must specify an index.")
         except Exception:

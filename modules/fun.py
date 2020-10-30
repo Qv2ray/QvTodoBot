@@ -20,15 +20,19 @@ class HaveSomeFun:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         parsed_message = update.message.text.split(' ', 1)
-        if len(parsed_message) == 2:
+        if update.message.reply_to_message is not None:
+            thank_target = update.message.reply_to_message.from_user['username']
             self.bot.send_message(update.message.chat_id,
-                                  f'Thank you so much, {parsed_message[1]}!')
+                                  f'Thank you so much, {thank_target}! 😊')
+        elif len(parsed_message) == 2:
+            self.bot.send_message(update.message.chat_id,
+                                  f'Thank you so much, {parsed_message[1]}! 😊')
         else:
             update.message.reply_text('You must specify a target to thank!')
 
     def thanks(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
-        update.message.reply_text('You\'re welcome!')
+        update.message.reply_text('You\'re welcome! 🦾')
 
     def call_cops(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
@@ -49,9 +53,9 @@ class HaveSomeFun:
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         eater = update.message.from_user['username']
-        eat_target = update.message.reply_to_message.from_user['username']
         parsed_message = update.message.text.split(' ', 1)
-        if eat_target is not None:
+        if update.message.reply_to_message is not None:
+            eat_target = update.message.reply_to_message.from_user['username']
             self.bot.send_message(update.message.chat_id,
                                   f'{eater} has eaten {eat_target}! 🍴😋')
         elif len(parsed_message) == 2:
@@ -63,8 +67,7 @@ class HaveSomeFun:
 
     def fuck(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
-        fuck_target = update.message.reply_to_message.from_user['username']
-        if fuck_target is not None:
+        if update.message.reply_to_message is not None:
             update.message.reply_to_message.reply_text(
                 random.choice(["🍑", "🍆"]))
         else:
