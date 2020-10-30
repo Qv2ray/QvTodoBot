@@ -19,10 +19,10 @@ class HaveSomeFun:
     def thank(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
-        thank_target = update.message.text.split(' ', 1)[1]
-        if thank_target != "":
+        parsed_message = update.message.text.split(' ', 1)
+        if len(parsed_message) == 2:
             self.bot.send_message(update.message.chat_id,
-                                  f'Thank you so much, {thank_target}!')
+                                  f'Thank you so much, {parsed_message[1]}!')
         else:
             update.message.reply_text('You must specify a target to thank!')
 
@@ -50,13 +50,22 @@ class HaveSomeFun:
         assert isinstance(update.message.text, str)
         eater = update.message.from_user['username']
         eat_target = update.message.reply_to_message.from_user['username']
-        if eat_target != "":
+        parsed_message = update.message.text.split(' ', 1)
+        if eat_target is not None:
             self.bot.send_message(update.message.chat_id,
                                   f'{eater} has eaten {eat_target}! 🍴😋')
+        elif len(parsed_message) == 2:
+            self.bot.send_message(update.message.chat_id,
+                                  f'{eater} has eaten {parsed_message[1]}! 🍴😋')
         else:
             update.message.reply_text(
                 'You must reply to the target you want to eat!')
 
     def fuck(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
-        update.message.reply_text(random.choice(["🍑", "🍆"]))
+        fuck_target = update.message.reply_to_message.from_user['username']
+        if fuck_target is not None:
+            update.message.reply_to_message.reply_text(
+                random.choice(["🍑", "🍆"]))
+        else:
+            update.message.reply_text(random.choice(["🍑", "🍆"]))

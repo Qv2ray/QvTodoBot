@@ -13,7 +13,8 @@ class Darter:
         return [CommandHandler("dart", self.dart),
                 CommandHandler("dice", self.dice),
                 CommandHandler("basketball", self.basketball),
-                CommandHandler("soccer", self.soccer)]
+                CommandHandler("soccer", self.soccer),
+                CommandHandler("roll", self.roll)]
 
     def dart(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
@@ -62,3 +63,15 @@ class Darter:
             times = 1
         for i in range(times):
             self.bot.send_dice(chat_id=update.message.chat_id, emoji='⚽️')
+
+    def roll(self, update: Update, context: CallbackContext):
+        assert isinstance(update.message, Message)
+        assert isinstance(update.message.text, str)
+        text = ''.join(map(str, update.message.text.split(' ')[1:]))
+        nsp = expression.NumericStringParser()
+        try:
+            times = int(nsp.eval(text))
+        except Exception:
+            times = 1
+        for i in range(times):
+            self.bot.send_dice(chat_id=update.message.chat_id, emoji='🎰')

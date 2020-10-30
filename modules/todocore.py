@@ -13,6 +13,13 @@ def format_data(data):
     return formatted_data
 
 
+def parse_index(index):
+    try:
+        return int(index)
+    except ValueError:
+        return None
+
+
 class TodoEngine:
     def __init__(self, bot: Bot):
         self.bot = bot
@@ -42,14 +49,13 @@ class TodoEngine:
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
         try:
-            text = update.message.text.split(' ')[1:]
-            if text:
-                text = ' '.join(map(str, text))
+            parsed_message = update.message.text.split(' ', 1)
+            if len(parsed_message) == 2:
                 if 'todo' not in user_data:
                     user_data['todo'] = []
                 todo_list = user_data['todo']
                 todo_list.append(
-                    f'{text} - Created at UTC {formatted_datetime}')
+                    f'{parsed_message[1]} - Created at UTC {formatted_datetime}')
                 if not todo_list:
                     message = "Nothing to do here."
                 else:
@@ -59,7 +65,7 @@ class TodoEngine:
             else:
                 update.message.reply_text('Todo item can not be empty')
         except Exception as e:
-            update.message.reply_text('An error occurred')
+            update.message.reply_text('An error occurred.')
             print(repr(e))
 
     def remove(self, update: Update, context: CallbackContext):
@@ -67,32 +73,42 @@ class TodoEngine:
         assert isinstance(update.message.text, str)
         user_data: UserData = context.user_data
         try:
-            index = update.message.text.split(' ')[1]
-            todo_list = user_data['todo']
-            todo_list.pop(int(index) - 1)
-            message = format_data(todo_list)
-            if message:
-                update.message.reply_text(message)
+            parsed_message = update.message.text.split(' ', 1)
+            if len(parsed_message) == 2:
+                index = parse_index(parsed_message[1])
+                if (index is not None):
+                    index -= 1
+                    todo_list = user_data['todo']
+                    todo_list.pop(index)
+                    message = format_data(todo_list)
+                    if message:
+                        update.message.reply_text(message)
+                    else:
+                        update.message.reply_text('Nothing to do')
             else:
-                update.message.reply_text('Nothing to do')
+                update.message.reply_text("You must specify an index.")
         except Exception:
-            update.message.reply_text('An error occurred')
+            update.message.reply_text('An error occurred.')
 
     def toggle(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
         assert isinstance(update.message.text, str)
         user_data: UserData = context.user_data
         try:
-            index = int(update.message.text.split(' ')[1]) - 1
-            todo_list = user_data['todo']
-
-            if emojize(":white_heavy_check_mark:") not in todo_list[index]:
-                todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
+            parsed_message = update.message.text.split(' ', 1)
+            if len(parsed_message) == 2:
+                index = parse_index(parsed_message[1])
+                if (index is not None):
+                    index -= 1
+                    todo_list = user_data['todo']
+                    if emojize(":white_heavy_check_mark:") not in todo_list[index]:
+                        todo_list[index] = f'{todo_list[index]} {emojize(":white_heavy_check_mark:")}'
+                    else:
+                        todo_list[index] = todo_list[index].replace(
+                            emojize(":white_heavy_check_mark:"), '')
+                    message = format_data(todo_list)
+                    update.message.reply_text(message)
             else:
-                todo_list[index] = todo_list[index].replace(
-                    emojize(":white_heavy_check_mark:"), '')
-
-            message = format_data(todo_list)
-            update.message.reply_text(message)
+                update.message.reply_text("You must specify an index.")
         except Exception:
-            update.message.reply_text('An error occurred')
+            update.message.reply_text('An error occurred.')
