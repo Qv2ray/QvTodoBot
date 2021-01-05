@@ -49,21 +49,29 @@ class TodoEngine:
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
         try:
-            parsed_message = update.message.text.split(' ', 1)
-            if len(parsed_message) == 2:
-                if 'todo' not in user_data:
-                    user_data['todo'] = []
-                todo_list = user_data['todo']
-                todo_list.append(
-                    f'{parsed_message[1]} - Created at UTC {formatted_datetime}')
-                if not todo_list:
-                    message = "Nothing to do here."
-                else:
-                    message = format_data(todo_list)
-
-                update.message.reply_text(message)
+            if update.message.reply_to_message is not None:
+                from_user = update.message.reply_to_message.from_user['username']
+                message = update.message.reply_to_message.text.strip()
+                if len(message) == 0:
+                    update.message.reply_text('Todo item can not be empty')
+                    return
+                message = f'{message} @{from_user}'
             else:
-                update.message.reply_text('Todo item can not be empty')
+                parsed_message = update.message.text.split(' ', 1)
+                if len(parsed_message) < 2:
+                    update.message.reply_text('Todo item can not be empty')
+                    return
+                message = parsed_message[1]
+            if 'todo' not in user_data:
+                user_data['todo'] = []
+            todo_list = user_data['todo']
+            todo_list.append(
+                f'{message} - Created at UTC {formatted_datetime}')
+            if not todo_list:
+                message = "Nothing to do here."
+            else:
+                message = format_data(todo_list)
+            update.message.reply_text(message)
         except Exception as e:
             update.message.reply_text('An error occurred.')
             print(repr(e))
