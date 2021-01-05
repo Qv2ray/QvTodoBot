@@ -48,25 +48,38 @@ class TodoEngine:
         user_data: UserData = context.user_data
         now = datetime.now()
         formatted_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
-        try:
-            parsed_message = update.message.text.split(' ', 1)
-            if len(parsed_message) == 2:
-                if 'todo' not in user_data:
-                    user_data['todo'] = []
-                todo_list = user_data['todo']
-                todo_list.append(
-                    f'{parsed_message[1]} - Created at UTC {formatted_datetime}')
-                if not todo_list:
-                    message = "Nothing to do here."
-                else:
-                    message = format_data(todo_list)
-
-                update.message.reply_text(message)
+        if update.message.reply_to_message is not None:
+            from_user = update.message.reply_to_message.from_user['username']
+            message = update.message.reply_to_message.text
+            if 'todo' not in user_data:
+                user_data['todo'] = []
+            todo_list = user_data['todo']
+            todo_list.append(
+                f'{message} @{from_user} - Created at UTC {formatted_datetime}')
+            if not todo_list:
+                message = "Nothing to do here."
             else:
-                update.message.reply_text('Todo item can not be empty')
-        except Exception as e:
-            update.message.reply_text('An error occurred.')
-            print(repr(e))
+                message = format_data(todo_list)
+        else:
+            try:
+                parsed_message = update.message.text.split(' ', 1)
+                if len(parsed_message) == 2:
+                    if 'todo' not in user_data:
+                        user_data['todo'] = []
+                    todo_list = user_data['todo']
+                    todo_list.append(
+                        f'{parsed_message[1]} - Created at UTC {formatted_datetime}')
+                    if not todo_list:
+                        message = "Nothing to do here."
+                    else:
+                        message = format_data(todo_list)
+
+                    update.message.reply_text(message)
+                else:
+                    update.message.reply_text('Todo item can not be empty')
+            except Exception as e:
+                update.message.reply_text('An error occurred.')
+                print(repr(e))
 
     def remove(self, update: Update, context: CallbackContext):
         assert isinstance(update.message, Message)
